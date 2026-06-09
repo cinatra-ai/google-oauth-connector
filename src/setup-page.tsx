@@ -9,7 +9,7 @@
 // SDK DI contract for both render and action keeps the connector off the host
 // `ctx.capabilities` registry entirely.
 
-import { ConnectorSettingsDialog } from "@cinatra-ai/sdk-ui";
+import { Main, PageHeader, PageContent } from "@cinatra-ai/sdk-ui/marketplace";
 import type { ExtensionHostContext } from "@cinatra-ai/sdk-extensions";
 import { requireGoogleOAuthConnectionProvider } from "@cinatra-ai/sdk-extensions";
 import { GoogleOAuthSettingsForm } from "./settings-form";
@@ -23,7 +23,7 @@ type ConnectorSetupPageProps = {
 
 export default async function GoogleOAuthConnectorSetupPage(_props: ConnectorSetupPageProps) {
   // Resolve the host-bound facade via the SDK DI slot. Fails CLOSED (throws) if
-  // the host never wired it — a boot-wiring bug, surfaced by the dialog's error
+  // the host never wired it — a boot-wiring bug, surfaced by the route's error
   // boundary rather than silently rendering an empty form.
   const facade = requireGoogleOAuthConnectionProvider();
 
@@ -42,19 +42,17 @@ export default async function GoogleOAuthConnectorSetupPage(_props: ConnectorSet
   };
 
   return (
-    <ConnectorSettingsDialog closeHref="/configuration/llm">
-      <div className="mb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">API setup</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">Google OAuth</h2>
-      </div>
-
-      <GoogleOAuthSettingsForm
-        administration={administration}
-        status={status}
-        showConnectionActions={false}
-        nangoCallbackUri={nangoCallbackUri}
-        betterAuthCallbackUri={betterAuthCallbackUri}
-      />
-    </ConnectorSettingsDialog>
+    <Main className="min-h-screen">
+      <PageHeader title="Google OAuth" description="API setup" className="max-w-3xl" />
+      <PageContent className="max-w-3xl flex flex-col gap-6 pb-8">
+        <GoogleOAuthSettingsForm
+          administration={administration}
+          status={status}
+          showConnectionActions={false}
+          nangoCallbackUri={nangoCallbackUri}
+          betterAuthCallbackUri={betterAuthCallbackUri}
+        />
+      </PageContent>
+    </Main>
   );
 }
