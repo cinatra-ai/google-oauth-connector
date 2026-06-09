@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import { StatusPill, type StatusPillStatus } from "@cinatra-ai/sdk-ui";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
@@ -69,6 +69,15 @@ export function GoogleOAuthSettingsPanel({
             Configure the Google OAuth values Cinatra uses to connect Gmail and Google Calendar. Mailbox and calendar access
             require OAuth. API keys can be stored here, but they cannot access a user mailbox or calendar data.
           </p>
+          <a
+            href="https://console.cloud.google.com/apis/credentials"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline underline-offset-4 transition-colors hover:text-muted-foreground"
+          >
+            Get your OAuth client ID &amp; secret in the Google Cloud Console
+            <ExternalLink className="size-3.5" aria-hidden />
+          </a>
         </div>
         <StatusPill status={pill.pill}>{pill.label}</StatusPill>
       </div>
