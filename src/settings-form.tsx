@@ -39,10 +39,15 @@ export function GoogleOAuthSettingsForm({
         body: "Google OAuth settings have been updated.",
         kind: "success",
       });
-    } catch (error) {
+    } catch {
+      // In a Next.js production build, a thrown Server Action error reaches
+      // this catch with its real message replaced by the framework's generic
+      // masking blurb, so the caught message is never useful UI copy. Show
+      // friendly operation-specific copy unconditionally; the server-side
+      // logging of the real failure is unchanged.
       addNotification({
         title: "Google OAuth save failed",
-        body: (error instanceof Error && error.message) ? error.message : "Unable to save the Google OAuth connection.",
+        body: "Unable to save the Google OAuth connection.",
         kind: "error",
       });
     }
