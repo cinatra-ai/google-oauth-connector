@@ -79,7 +79,7 @@ export function GoogleOAuthSettingsPanel({
             >
               Google Cloud Console
             </a>{" "}
-            (APIs &amp; Services → Credentials → Create credentials → OAuth client
+            (APIs & Services → Credentials → Create credentials → OAuth client
             ID, application type <strong>Web application</strong>), then paste the
             client ID and secret below and register the redirect URIs shown.
           </p>
