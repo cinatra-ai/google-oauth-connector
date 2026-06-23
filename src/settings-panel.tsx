@@ -69,6 +69,20 @@ export function GoogleOAuthSettingsPanel({
             Configure the Google OAuth values Cinatra uses to connect Gmail and Google Calendar. Mailbox and calendar access
             require OAuth. API keys can be stored here, but they cannot access a user mailbox or calendar data.
           </p>
+          <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
+            Create an OAuth client in the{" "}
+            <a
+              href="https://console.cloud.google.com/apis/credentials"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              Google Cloud Console
+            </a>{" "}
+            (APIs & Services → Credentials → Create credentials → OAuth client
+            ID, application type <strong>Web application</strong>), then paste the
+            client ID and secret below and register the redirect URIs shown.
+          </p>
         </div>
         <StatusPill status={pill.pill}>{pill.label}</StatusPill>
       </div>
