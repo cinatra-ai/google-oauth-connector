@@ -5,6 +5,7 @@ import { Check, Copy } from "lucide-react";
 import { StatusPill, type StatusPillStatus } from "@cinatra-ai/sdk-ui";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
+import { ExternalLink } from "./components/ui/external-link";
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 
@@ -71,14 +72,9 @@ export function GoogleOAuthSettingsPanel({
           </p>
           <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
             Create an OAuth client in the{" "}
-            <a
-              href="https://console.cloud.google.com/apis/credentials"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground"
-            >
+            <ExternalLink href="https://console.cloud.google.com/apis/credentials">
               Google Cloud Console
-            </a>{" "}
+            </ExternalLink>{" "}
             (APIs & Services → Credentials → Create credentials → OAuth client
             ID, application type <strong>Web application</strong>), then paste the
             client ID and secret below and register the redirect URIs shown.
