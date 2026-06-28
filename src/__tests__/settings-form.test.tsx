@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
  * GoogleOAuthSettingsForm error-notification contract
- * (cinatra-ai/cinatra-engineering#67; host pattern: cinatra-ai/cinatra#51).
+ * (host pattern: cinatra-ai/cinatra#51).
  *
  * In a Next.js production build, a Server Action that throws has its real
  * `Error.message` replaced by the framework's generic masking blurb before it
