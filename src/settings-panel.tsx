@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { StatusPill, type StatusPillStatus } from "@cinatra-ai/sdk-ui";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
 import { ExternalLink } from "./components/ui/external-link";
@@ -27,17 +26,6 @@ type GoogleOAuthSettingsPanelProps = {
   betterAuthCallbackUri?: string;
 };
 
-// Map the connector's OAuth status to the canonical StatusPill vocabulary
-// (design-skill R1 — status flows through StatusPill, never a hand-rolled badge).
-const STATUS_PILL: Record<
-  GoogleOAuthSettingsPanelProps["status"]["status"],
-  { pill: StatusPillStatus; label: string }
-> = {
-  connected: { pill: "approved", label: "Connected" },
-  incomplete: { pill: "needs-review", label: "Setup required" },
-  not_connected: { pill: "idle", label: "Not connected" },
-};
-
 export function GoogleOAuthSettingsPanel({
   settings,
   status,
@@ -48,7 +36,6 @@ export function GoogleOAuthSettingsPanel({
 }: GoogleOAuthSettingsPanelProps) {
   const [copied, setCopied] = useState(false);
   const callbackUris = [nangoCallbackUri, betterAuthCallbackUri].filter(Boolean) as string[];
-  const pill = STATUS_PILL[status.status];
 
   async function handleCopyRedirectUri() {
     try {
@@ -63,24 +50,27 @@ export function GoogleOAuthSettingsPanel({
   return (
     <Card className="border-line bg-surface backdrop-blur-none rounded-card">
       <CardContent className="p-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Google OAuth configuration</h2>
-          <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
-            Configure the Google OAuth values Cinatra uses to connect Gmail and Google Calendar. Mailbox and calendar access
-            require OAuth. API keys can be stored here, but they cannot access a user mailbox or calendar data.
-          </p>
-          <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
-            Create an OAuth client in the{" "}
-            <ExternalLink href="https://console.cloud.google.com/apis/credentials">
-              Google Cloud Console
-            </ExternalLink>{" "}
-            (APIs & Services → Credentials → Create credentials → OAuth client
-            ID, application type <strong>Web application</strong>), then paste the
-            client ID and secret below and register the redirect URIs shown.
-          </p>
-        </div>
-        <StatusPill status={pill.pill}>{pill.label}</StatusPill>
+      {/* The connection-status badge is HOST-injected on the connector
+          setup-page dispatch route — the same badge the /connectors card
+          shows — so the extension no longer renders its own status pill here
+          (it would duplicate the host badge). The title + form stay
+          extension-owned; the per-account "Connected Google account" line and
+          the status detail block below remain. */}
+      <div>
+        <h2 className="text-2xl font-semibold tracking-tight">Google OAuth configuration</h2>
+        <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
+          Configure the Google OAuth values Cinatra uses to connect Gmail and Google Calendar. Mailbox and calendar access
+          require OAuth. API keys can be stored here, but they cannot access a user mailbox or calendar data.
+        </p>
+        <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
+          Create an OAuth client in the{" "}
+          <ExternalLink href="https://console.cloud.google.com/apis/credentials">
+            Google Cloud Console
+          </ExternalLink>{" "}
+          (APIs & Services → Credentials → Create credentials → OAuth client
+          ID, application type <strong>Web application</strong>), then paste the
+          client ID and secret below and register the redirect URIs shown.
+        </p>
       </div>
 
       {status.accountEmail ? (
