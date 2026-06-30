@@ -49,6 +49,7 @@
     "apiVersion": "cinatra.ai/v1",
     "kind": "connector",
     "displayName": "Google",
+    "sdkAbiRange": "^2",
     "requestedHostPorts": [],
     "dependencies": []
   }
