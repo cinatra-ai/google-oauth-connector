@@ -10,7 +10,6 @@
  * `error.message` — or production users see the masking paragraph as the
  * toast body.
  */
-import * as React from "react";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -19,9 +18,6 @@ const addNotification = vi.fn();
 
 vi.mock("@cinatra-ai/sdk-ui", () => ({
   useNotify: () => ({ addNotification }),
-  StatusPill: ({ children }: { children?: React.ReactNode }) => (
-    <span>{children}</span>
-  ),
 }));
 
 vi.mock("../actions", () => ({
