@@ -55,6 +55,7 @@
     "displayName": "Google",
     "sdkAbiRange": "^2",
     "requestedHostPorts": [],
-    "dependencies": []
+    "dependencies": [],
+    "consumes": []
   }
 }
