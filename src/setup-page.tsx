@@ -21,7 +21,7 @@ type ConnectorSetupPageProps = {
   ctx: ExtensionHostContext;
 };
 
-export default async function GoogleOAuthConnectorSetupPage(_props: ConnectorSetupPageProps) {
+export default async function GoogleOAuthConnectorSetupPage({ ctx }: ConnectorSetupPageProps) {
   // Resolve the host-bound facade via the SDK DI slot. Fails CLOSED (throws) if
   // the host never wired it — a boot-wiring bug, surfaced by the route's error
   // boundary rather than silently rendering an empty form.
@@ -29,7 +29,12 @@ export default async function GoogleOAuthConnectorSetupPage(_props: ConnectorSet
 
   const [settings, status] = await Promise.all([facade.getSettings(), facade.getStatus()]);
   const nangoCallbackUri = facade.getOAuthCallbackUrl();
-  const betterAuthCallbackUri = `${process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}/api/auth/callback/google`;
+  // App base URL comes from the host through the ambient `ctx.runtime` port —
+  // extension code must not read `process.env` directly (host/extension
+  // boundary). The host resolves its auth base URL behind this port; the
+  // localhost fallback mirrors the host's own dev default.
+  const appBaseUrl = ctx.runtime.publicBaseUrl() ?? "http://localhost:3000";
+  const betterAuthCallbackUri = `${appBaseUrl}/api/auth/callback/google`;
 
   // The OAuth client SECRET is write-only: never send it to the client. The form
   // renders the secret field empty + a "saved" indicator; saving a blank secret
