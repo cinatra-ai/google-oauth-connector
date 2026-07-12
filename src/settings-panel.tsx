@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
-import { ExternalLink } from "./components/ui/external-link";
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 
@@ -53,24 +52,14 @@ export function GoogleOAuthSettingsPanel({
       {/* The connection-status badge is HOST-injected on the connector
           setup-page dispatch route — the same badge the /connectors card
           shows — so the extension no longer renders its own status pill here
-          (it would duplicate the host badge). The title + form stay
-          extension-owned; the per-account "Connected Google account" line and
-          the status detail block below remain. */}
+          (it would duplicate the host badge). The title stays extension-owned;
+          the per-account "Connected Google account" line and the status detail
+          block below remain. The general config how-to (create an OAuth
+          client, where to paste it) now lives in the setup page's Help tab
+          (always last, per app-connectors.html §II) instead of duplicating it
+          here above the form. */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Google OAuth configuration</h2>
-        <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
-          Configure the Google OAuth values Cinatra uses to connect Gmail and Google Calendar. Mailbox and calendar access
-          require OAuth. API keys can be stored here, but they cannot access a user mailbox or calendar data.
-        </p>
-        <p className="mt-3 max-w-[64ch] text-sm leading-[1.55] text-pretty text-muted-foreground">
-          Create an OAuth client in the{" "}
-          <ExternalLink href="https://console.cloud.google.com/apis/credentials">
-            Google Cloud Console
-          </ExternalLink>{" "}
-          (APIs & Services → Credentials → Create credentials → OAuth client
-          ID, application type <strong>Web application</strong>), then paste the
-          client ID and secret below and register the redirect URIs shown.
-        </p>
       </div>
 
       {status.accountEmail ? (

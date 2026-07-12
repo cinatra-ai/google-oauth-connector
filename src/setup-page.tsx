@@ -8,10 +8,23 @@
 // backs the save action at `./actions` (which can't close over ctx). Using one
 // SDK DI contract for both render and action keeps the connector off the host
 // `ctx.capabilities` registry entirely.
+//
+// Per the extended connector setup-page spec (design/specs/app-connectors.html
+// §II — tabbed setup page; config how-to in a Help tab always last), this
+// connector holds ONE shared, admin-level OAuth-client configuration — no
+// per-user connect/disconnect flow and no multiple instances — so its actual
+// connection model is a single flat config tab plus the reserved Help tab.
+// `ConnectorSetupPage` supplies the standard Wide-column chrome (`divider=false`
+// hands the section rule to the tab row's `TabsListRow` so the two rules never
+// stack), and `Tabs`/`TabsListRow`/`TabsTrigger`/`TabsContent` come from the
+// shared, connector-agnostic `@cinatra-ai/sdk-ui/tabs` primitive (no vendored
+// `tabs.tsx`).
 
-import { Main, PageHeader, PageContent } from "@cinatra-ai/sdk-ui/marketplace";
+import { ConnectorSetupPage } from "@cinatra-ai/sdk-ui/connector-setup-page";
+import { Tabs, TabsContent, TabsListRow, TabsTrigger } from "@cinatra-ai/sdk-ui/tabs";
 import type { ExtensionHostContext } from "@cinatra-ai/sdk-extensions";
 import { requireGoogleOAuthConnectionProvider } from "@cinatra-ai/sdk-extensions";
+import { ExternalLink } from "./components/ui/external-link";
 import { GoogleOAuthSettingsForm } from "./settings-form";
 
 type ConnectorSetupPageProps = {
@@ -47,17 +60,64 @@ export default async function GoogleOAuthConnectorSetupPage({ ctx }: ConnectorSe
   };
 
   return (
-    <Main className="min-h-screen">
-      <PageHeader title="Google OAuth" description="API setup" className="max-w-3xl" />
-      <PageContent className="max-w-3xl flex flex-col gap-6 pb-8">
-        <GoogleOAuthSettingsForm
-          administration={administration}
-          status={status}
-          showConnectionActions={false}
-          nangoCallbackUri={nangoCallbackUri}
-          betterAuthCallbackUri={betterAuthCallbackUri}
-        />
-      </PageContent>
-    </Main>
+    <ConnectorSetupPage
+      title="Google OAuth"
+      description="API setup"
+      divider={false}
+      className="flex flex-col gap-6 pb-8"
+    >
+      <Tabs defaultValue="setup" className="w-full">
+        <TabsListRow aria-label="Google OAuth connector setup">
+          <TabsTrigger value="setup">Setup</TabsTrigger>
+          {/* Help is RESERVED and ALWAYS LAST (app-connectors.html §II). */}
+          <TabsTrigger value="help">Help</TabsTrigger>
+        </TabsListRow>
+
+        {/* SETUP — the single, shared OAuth-client configuration. No
+            Connect/Disconnect or Connection-status card: this connector has no
+            per-user connection to check, so it stays Wide, single-column. */}
+        <TabsContent
+          value="setup"
+          forceMount
+          className="mt-6 data-[state=inactive]:hidden"
+        >
+          <GoogleOAuthSettingsForm
+            administration={administration}
+            status={status}
+            showConnectionActions={false}
+            nangoCallbackUri={nangoCallbackUri}
+            betterAuthCallbackUri={betterAuthCallbackUri}
+          />
+        </TabsContent>
+
+        {/* HELP — reserved, always LAST, read-only (no form, no Save). Narrow,
+            per the additional-config-tab treatment. */}
+        <TabsContent
+          value="help"
+          forceMount
+          className="mt-6 flex max-w-xl flex-col gap-5 data-[state=inactive]:hidden"
+        >
+          <p className="text-sm leading-6 text-muted-foreground">
+            Cinatra uses these Google OAuth client values to connect Gmail and
+            Google Calendar. Mailbox and calendar access require OAuth; API
+            keys can be stored here, but they cannot access a user&apos;s
+            mailbox or calendar data.
+          </p>
+          <div>
+            <h3 className="mb-1 text-sm font-semibold text-foreground">Create an OAuth client</h3>
+            <p className="text-sm leading-6 text-muted-foreground">
+              In the{" "}
+              <ExternalLink href="https://console.cloud.google.com/apis/credentials">
+                Google Cloud Console
+              </ExternalLink>{" "}
+              (APIs &amp; Services → Credentials → Create credentials → OAuth
+              client ID, application type Web application), create an OAuth
+              client, then paste its client ID and secret into the Setup tab
+              and register the redirect URIs shown there.
+            </p>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </ConnectorSetupPage>
   );
 }
