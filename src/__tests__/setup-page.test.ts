@@ -139,4 +139,12 @@ describe("settings-panel — content moved to Help, not duplicated in Setup", ()
     expect(settingsPanelSrc).toContain('name="clientSecret"');
     expect(settingsPanelSrc).toContain("Save Google OAuth");
   });
+
+  // The saved-state line added for #57 reports STORED CONFIGURATION, so it must
+  // not grow back into a second connection badge beside the host-injected one
+  // the dispatch route already renders.
+  it("leaves the connection badge to the host dispatch route", () => {
+    expect(settingsPanelSrc).not.toContain("StatusPill");
+    expect(settingsPanelSrc).not.toContain("ConnectionStatusBadge");
+  });
 });
