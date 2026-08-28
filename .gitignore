@@ -22,3 +22,8 @@ coverage/
 # Claude Code (local-only session data)
 .claude/
 .planning/
+
+# proof artifacts never live in the checkout
+evidence/
+pr-evidence/
+docs/proof/
