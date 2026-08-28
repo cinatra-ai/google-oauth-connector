@@ -28,6 +28,7 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
+    "next": "^16.2.10",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "@cinatra-ai/sdk-extensions": "*",
