@@ -56,7 +56,10 @@ function shippedSourceFiles(dir: string): string[] {
     });
 }
 
-function packageNameOf(specifier: string): string {
+function packageNameOf(specifier: string): string | null {
+  // The host serves this exact virtual module; it has no registry dependency.
+  // Keep subpaths and similarly named packages in the ordinary dependency check.
+  if (specifier === "@cinatra-ai/design-primitives") return null;
   const segments = specifier.split("/");
   return specifier.startsWith("@")
     ? segments.slice(0, 2).join("/")
@@ -72,13 +75,21 @@ function importedPackages(): string[] {
       // Relative paths and Node built-ins are never npm packages. Built-ins
       // are recognised by Node itself, so the bare form ("fs") counts too.
       if (specifier.startsWith(".") || isBuiltin(specifier)) continue;
-      imported.add(packageNameOf(specifier));
+      const name = packageNameOf(specifier);
+      if (name !== null) imported.add(name);
     }
   }
   return [...imported].sort();
 }
 
 describe("declared dependencies", () => {
+  it("excludes only the exact host-served virtual module from registry packages", () => {
+    expect(packageNameOf("@cinatra-ai/design-primitives")).toBeNull();
+    expect(packageNameOf("@cinatra-ai/design-primitives/button")).toBe("@cinatra-ai/design-primitives");
+    expect(packageNameOf("@cinatra-ai/design-primitives-other")).toBe("@cinatra-ai/design-primitives-other");
+    expect(packageNameOf("next/cache")).toBe("next");
+  });
+
   // Only the buckets that survive a production install: a package the shipped
   // source imports may never rest on a dev-only declaration.
   const declaredForRuntime = new Set([

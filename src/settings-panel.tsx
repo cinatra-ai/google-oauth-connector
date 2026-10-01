@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { Button } from "./components/ui/button";
-import { Card, CardContent } from "./components/ui/card";
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
+import { Button } from "@cinatra-ai/design-primitives";
+import { Card, CardContent } from "@cinatra-ai/design-primitives";
+import { Input } from "@cinatra-ai/design-primitives";
+import { Label } from "@cinatra-ai/design-primitives";
 
 /**
  * What the operator typed into a save that was REJECTED. Owned here and used by

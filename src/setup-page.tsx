@@ -24,7 +24,7 @@ import { ConnectorSetupPage } from "@cinatra-ai/sdk-ui/connector-setup-page";
 import { Tabs, TabsContent, TabsListRow, TabsTrigger } from "@cinatra-ai/sdk-ui/tabs";
 import type { ExtensionHostContext } from "@cinatra-ai/sdk-extensions";
 import { requireGoogleOAuthConnectionProvider } from "@cinatra-ai/sdk-extensions";
-import { ExternalLink } from "./components/ui/external-link";
+import { ExternalLink } from "./ui/external-link";
 import { GoogleOAuthSettingsForm } from "./settings-form";
 
 type ConnectorSetupPageProps = {

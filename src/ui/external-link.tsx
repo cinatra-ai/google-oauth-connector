@@ -2,10 +2,10 @@
 
 import * as React from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "../lib/utils"
 
 // shadcn link primitive — the styled inline external anchor lives here, inside
-// the vendored ui/ carve-out, so the org ui-design-system gate's raw-<a> rule
+// the src/ui carve-out, so the org ui-design-system gate's raw-<a> rule
 // (Block B) does not fire on the underlying element. Consumers use <ExternalLink>
 // instead of a raw <a>. Defaults to safe rel/target for external destinations.
 function ExternalLink({
